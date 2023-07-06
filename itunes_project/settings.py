@@ -19,8 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-82@yj!-sdvk8hur3$kw20!cjp%wlmh)(i@#e@glor#&6kz$f8+'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'music',
 ]
 
 MIDDLEWARE = [
@@ -70,18 +71,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'itunes_project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'music_database',
-        'HOST': 'localhost',
-        'USER' : 'root',
-        'PASSWORD' : 'Sanders20'
-    }
-}
 
 
 # Password validation
@@ -127,6 +117,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 try:
-    from music_project.local_settings import *
+    from itunes_project.settings import *
 except ImportError:
     pass
