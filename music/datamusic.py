@@ -1,8 +1,14 @@
-from rest_framework import serializers
 
-class SongSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    artist = serializers.CharField()
-    album = serializers.CharField()
-    release_date = serializers.CharField()
-    genre = serializers.CharField()
+
+
+
+
+@api_view(['GET'])
+def music_detail(request, pk):
+    song = next((song for song in SongsData if song[0] == int(pk)), None)
+
+    if song:
+        serializer = SongSerializer(song)
+        return Response(serializer.data, status=200)
+    else:
+        return Response("Song not found", status=404)

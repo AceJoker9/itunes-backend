@@ -25,10 +25,55 @@ SongsData = [
 ]
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def music_list(request):
-    serializer = SongSerializer(SongsData, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        serializer = SongSerializer(SongsData, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = SongSerializer(data=request.data)
+        if serializer.is_valid():
+            song_data = serializer.validated_data
+            song_id = len(SongsData) + 1  
+            song = (song_id, song_data['title'], song_data['artist'], song_data['album'], song_data['release_date'], song_data['genre'])
+            SongsData.append(song)  
+            
+            return Response(serializer.data, status=201)
+        else:
+            return Response(serializer.errors, status=400)
+
+
+@api_view(['PUT'])
+def music_detail(request, pk):
+    song = next((song for song in SongsData if song[0] == int(pk)), None)
+
+    if song:
+        serializer = SongSerializer(song, data=request.data)
+        if serializer.is_valid():
+            song_data = serializer.validated_data
+            song = (song[0], song_data.get('title', song[1]), song_data.get('artist', song[2]), song_data.get('album', song[3]), song_data.get('release_date', song[4]), song_data.get('genre', song[5]))
+            index = SongsData.index(song)
+            SongsData[index] = song
+
+            return Response(serializer.data, status=200)
+        else:
+            return Response(serializer.errors, status=400)
+    else:
+        return Response("Song not found", status=404)
+    
+@api_view(['DELETE'])
+def music_detail(request, pk):
+    song = next((song for song in SongsData if song[0] == int(pk)), None)
+
+    if song:
+        SongsData.remove(song)
+        return Response(status=204)
+    else:
+        return Response("Song not found", status=404)
+    
+
+
 
 
 @api_view(['GET'])
@@ -40,5 +85,11 @@ def music_detail(request, pk):
         return Response(serializer.data, status=200)
     else:
         return Response("Song not found", status=404)
+
+
+
+    
+
+
 
 
