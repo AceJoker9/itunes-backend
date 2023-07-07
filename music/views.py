@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class SongSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()  # Set id field as read-only
+    id = serializers.IntegerField(primary_key=True)
     title = serializers.CharField()
     artist = serializers.CharField()
     album = serializers.CharField()
